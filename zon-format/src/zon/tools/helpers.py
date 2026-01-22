@@ -10,24 +10,24 @@ from ..core.decoder import decode
 from ..binary import encode_binary
 
 
-def size(data: Any, format: Literal['zon', 'binary', 'json'] = 'zon') -> int:
+def size(data: Any, format: Literal['zonf', 'binary', 'json'] = 'zonf') -> int:
     """Calculate the encoded size of data in different formats.
     
     Args:
         data: Data to measure
-        format: Format to use ('zon', 'binary', or 'json')
+        format: Format to use ('zonf', 'binary', or 'json')
         
     Returns:
         Size in bytes
         
     Example:
         >>> data = {"name": "Alice", "age": 30}
-        >>> size(data, 'zon')
+        >>> size(data, 'zonf')
         45
         >>> size(data, 'json')
         28
     """
-    if format == 'zon':
+    if format == 'zonf':
         return len(encode(data).encode('utf-8'))
     elif format == 'binary':
         return len(encode_binary(data))
@@ -52,7 +52,7 @@ def compare_formats(data: Any) -> Dict[str, Any]:
         >>> result['savings']['zon_vs_json']
         35.5
     """
-    zon_size = size(data, 'zon')
+    zonf_size = size(data, 'zonf')
     binary_size = size(data, 'binary')
     json_size = size(data, 'json')
     
@@ -64,13 +64,13 @@ def compare_formats(data: Any) -> Dict[str, Any]:
         return (1 - smaller / larger) * 100
     
     return {
-        'zon': zon_size,
+        'zonf': zonf_size,
         'binary': binary_size,
         'json': json_size,
         'savings': {
-            'zon_vs_json': calc_savings(zon_size, json_size),
+            'zonf_vs_json': calc_savings(zonf_size, json_size),
             'binary_vs_json': calc_savings(binary_size, json_size),
-            'binary_vs_zon': calc_savings(binary_size, zon_size)
+            'binary_vs_zonf': calc_savings(binary_size, zonf_size)
         }
     }
 
@@ -194,8 +194,8 @@ def compare(data1: Any, data2: Any) -> Dict[str, Any]:
         'equal': data1 == data2,
         'data1_type': type(data1).__name__,
         'data2_type': type(data2).__name__,
-        'data1_size': size(data1, 'zon'),
-        'data2_size': size(data2, 'zon')
+        'data1_size': size(data1, 'zonf'),
+        'data2_size': size(data2, 'zonf')
     }
 
 
@@ -220,7 +220,7 @@ def is_safe(data: Any, max_depth: int = 10, max_size: int = 1000000) -> Dict[str
         stats = analyze(data)
         depth = stats['depth']
         
-        encoded_size = size(data, 'zon')
+        encoded_size = size(data, 'zonf')
         
         safe = depth <= max_depth and encoded_size <= max_size
         
