@@ -71,7 +71,7 @@ Rules:
         response = self.client.chat.completions.create(**kwargs)
         content = response.choices[0].message.content or ''
         
-        cleaned = re.sub(r'```(zon|zonf)?', '', content).strip()
+        cleaned = re.sub(r'```zonf?', '', content).strip()
         cleaned = cleaned.replace('```', '').strip()
         
         return decode(cleaned)

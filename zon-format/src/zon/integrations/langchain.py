@@ -56,7 +56,7 @@ items:@(2):id,name
             ValueError: If parsing fails
         """
         try:
-            cleaned = re.sub(r'```(zon|zonf)?', '', text).strip()
+            cleaned = re.sub(r'```zonf?', '', text).strip()
             cleaned = cleaned.replace('```', '').strip()
             return decode(cleaned)
         except Exception as e:

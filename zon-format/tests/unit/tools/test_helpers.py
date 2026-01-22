@@ -7,11 +7,11 @@ from zon.tools import size, compare_formats, infer_schema, analyze, compare, is_
 class TestSize:
     """Test size calculation"""
     
-    def test_size_zon(self):
+    def test_size_zonf(self):
         """Test ZON size calculation"""
         data = {"name": "Alice", "age": 30}
-        zon_size = size(data, 'zon')
-        assert zon_size > 0
+        zonf_size = size(data, 'zonf')
+        assert zonf_size > 0
     
     def test_size_binary(self):
         """Test binary size calculation"""
@@ -43,7 +43,7 @@ class TestCompareFormats:
         data = {"test": "value"}
         result = compare_formats(data)
         
-        assert 'zon' in result
+        assert 'zonf' in result
         assert 'binary' in result
         assert 'json' in result
         assert 'savings' in result
@@ -53,16 +53,16 @@ class TestCompareFormats:
         data = [{"id": i, "name": f"User{i}"} for i in range(10)]
         result = compare_formats(data)
         
-        assert 'zon_vs_json' in result['savings']
+        assert 'zonf_vs_json' in result['savings']
         assert 'binary_vs_json' in result['savings']
-        assert 'binary_vs_zon' in result['savings']
+        assert 'binary_vs_zonf' in result['savings']
     
     def test_compare_formats_all_positive_sizes(self):
         """Test all sizes are positive"""
         data = {"users": [{"id": 1}]}
         result = compare_formats(data)
         
-        assert result['zon'] > 0
+        assert result['zonf'] > 0
         assert result['binary'] > 0
         assert result['json'] > 0
 

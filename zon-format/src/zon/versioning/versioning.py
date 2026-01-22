@@ -19,8 +19,8 @@ class ZonDocumentMetadata:
     schema_id: Optional[str] = None
     """Optional schema identifier (e.g., "user-profile-v2")"""
     
-    encoding: str = 'zon'
-    """Encoding format used ("zon" | "zon-binary")"""
+    encoding: str = 'zonf'
+    """Encoding format used ("zonf" | "zonb")"""
     
     timestamp: Optional[int] = None
     """Unix timestamp when document was created"""
@@ -48,7 +48,7 @@ class ZonDocumentMetadata:
         return cls(
             version=data['version'],
             schema_id=data.get('schemaId'),
-            encoding=data.get('encoding', 'zon'),
+            encoding=data.get('encoding', 'zonf'),
             timestamp=data.get('timestamp'),
             custom=data.get('custom', {})
         )
@@ -58,7 +58,7 @@ def embed_version(
     data: Any,
     version: str,
     schema_id: Optional[str] = None,
-    encoding: str = 'zon'
+    encoding: str = 'zonf'
 ) -> Dict[str, Any]:
     """Embeds version metadata into a data object.
     
@@ -68,7 +68,7 @@ def embed_version(
         data: Data object to add metadata to
         version: Semantic version string (e.g., "1.0.0")
         schema_id: Optional schema identifier
-        encoding: Encoding format ('zon' or 'zon-binary')
+        encoding: Encoding format ('zonf' or 'zonb')
         
     Returns:
         Data object with embedded metadata

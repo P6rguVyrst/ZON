@@ -35,9 +35,9 @@ class TestVersionEmbedding:
     def test_embed_version_with_encoding(self):
         """Test embedding with encoding type"""
         data = {"test": "value"}
-        versioned = embed_version(data, "1.0.0", encoding="zon-binary")
+        versioned = embed_version(data, "1.0.0", encoding="zonb")
         
-        assert versioned['__zon_meta']['encoding'] == "zon-binary"
+        assert versioned['__zon_meta']['encoding'] == "zonb"
     
     def test_embed_version_adds_timestamp(self):
         """Test that timestamp is added"""
@@ -86,10 +86,10 @@ class TestVersionExtraction:
     def test_extract_version_preserves_encoding(self):
         """Test that encoding is preserved"""
         data = {"test": "value"}
-        versioned = embed_version(data, "1.0.0", encoding="zon-binary")
+        versioned = embed_version(data, "1.0.0", encoding="zonb")
         
         meta = extract_version(versioned)
-        assert meta.encoding == "zon-binary"
+        assert meta.encoding == "zonb"
 
 
 class TestVersionStripping:
@@ -184,14 +184,14 @@ class TestZonDocumentMetadata:
         meta = ZonDocumentMetadata(
             version="1.0.0",
             schema_id="test",
-            encoding="zon",
+            encoding="zonf",
             timestamp=1234567890
         )
         
         d = meta.to_dict()
         assert d['version'] == "1.0.0"
         assert d['schemaId'] == "test"
-        assert d['encoding'] == "zon"
+        assert d['encoding'] == "zonf"
         assert d['timestamp'] == 1234567890
     
     def test_metadata_from_dict(self):
@@ -199,14 +199,14 @@ class TestZonDocumentMetadata:
         d = {
             'version': '2.0.0',
             'schemaId': 'user-profile',
-            'encoding': 'zon-binary',
+            'encoding': 'zonb',
             'timestamp': 9876543210
         }
         
         meta = ZonDocumentMetadata.from_dict(d)
         assert meta.version == '2.0.0'
         assert meta.schema_id == 'user-profile'
-        assert meta.encoding == 'zon-binary'
+        assert meta.encoding == 'zonb'
         assert meta.timestamp == 9876543210
     
     def test_metadata_roundtrip(self):
