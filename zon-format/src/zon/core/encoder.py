@@ -650,7 +650,8 @@ class ZonEncoder:
             for k in keys:
                 v = val[k]
                 k_str = str(k)
-                if re.search(r'[,:\{\}\[\]"]', k_str):
+                # Quote keys with special chars OR boolean/null keywords
+                if re.search(r'[,:\{\}\[\]"]', k_str) or re.match(r'^(true|false|t|f|null|none|nil)$', k_str, re.IGNORECASE):
                     k_str = json.dumps(k_str)
 
                 v_str = self._format_zon_node(v, visited.copy())
