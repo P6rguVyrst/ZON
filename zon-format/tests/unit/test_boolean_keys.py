@@ -4,7 +4,6 @@ This module tests the fix for a bug where dictionary keys like "f", "t",
 "true", "false", "null" were incorrectly parsed as boolean/null values
 instead of being preserved as strings.
 
-See: https://github.com/ZON-Format/ZON/issues/XXX
 """
 
 import unittest
