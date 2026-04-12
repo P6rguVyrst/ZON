@@ -534,7 +534,9 @@ class ZonEncoder:
         lines: List[str] = []
 
         for col, values in dictionaries.items():
-            lines.append(f"{col}[{len(values)}]:{','.join(values)}")
+            # Quote dictionary values that contain special characters
+            formatted_values = [self._format_value(v) for v in values]
+            lines.append(f"{col}[{len(values)}]:{','.join(formatted_values)}")
 
         dict_cols = list(dictionaries.keys())
         regular_cols = [c for c in cols if c not in dictionaries]
