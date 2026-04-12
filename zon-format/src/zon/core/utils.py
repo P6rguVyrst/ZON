@@ -31,6 +31,33 @@ def quote_string(s: str) -> str:
     zon_str = inner.replace('\\"', '""')
     return f'"{zon_str}"'
 
+def parse_key(val: str) -> str:
+    """Parse a ZON dictionary key string.
+
+    Unlike parse_value, this does NOT convert boolean keywords (t, f, true, false)
+    or null keywords to Python types. Keys are always strings.
+
+    Args:
+        val: The key string to parse
+
+    Returns:
+        The parsed key as a string
+    """
+    trimmed = val.strip()
+
+    # Handle quoted strings
+    if trimmed.startswith('"'):
+        try:
+            return json.loads(trimmed)
+        except json.JSONDecodeError:
+            if trimmed.endswith('"'):
+                inner = trimmed[1:-1]
+                json_str = inner.replace('""', '\\"')
+                return json.loads(f'"{json_str}"')
+
+    return trimmed
+
+
 def parse_value(val: str) -> Any:
     """Parse a ZON value string into the appropriate Python type.
     
