@@ -28,7 +28,7 @@ class TestRoundtripBenchmarks(unittest.TestCase):
 
 def _make_test(filepath):
     def test_roundtrip(self):
-        with open(filepath) as f:
+        with filepath.open(encoding="utf-8") as f:
             original = json.load(f)
 
         encoded = zon.encode(original)
@@ -44,7 +44,11 @@ def _make_test(filepath):
     return test_roundtrip
 
 
-for filepath in get_json_files():
+json_files = get_json_files()
+if not json_files:
+    raise AssertionError(f"No benchmark JSON files found in {BENCHMARKS_DATA_DIR}")
+
+for filepath in json_files:
     test_name = f'test_roundtrip_{filepath.stem.replace("-", "_")}'
     setattr(TestRoundtripBenchmarks, test_name, _make_test(filepath))
 
