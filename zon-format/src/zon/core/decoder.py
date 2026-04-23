@@ -13,7 +13,7 @@ from .constants import (
 )
 from .exceptions import ZonDecodeError
 from ..schema.inference import TypeInferrer
-from .utils import parse_value
+from .utils import parse_key, parse_value
 
 class ZonDecoder:
     """Decodes ZON format strings into Python data structures.
@@ -409,7 +409,7 @@ class ZonDecoder:
                 if match:
                     key_str = match.group(1)
                     val_str = pair[match.end(1):]
-                    key = parse_value(key_str)
+                    key = parse_key(key_str)
                     val = self._parse_zon_node(val_str, depth + 1)
                     obj[key] = val
                     continue
@@ -424,7 +424,7 @@ class ZonDecoder:
                 key_str = pair[:colon_pos].strip()
                 val_str = pair[colon_pos + 1:].strip()
 
-                key = parse_value(key_str)
+                key = parse_key(key_str)
                 val = self._parse_zon_node(val_str, depth + 1)
                 obj[key] = val
 

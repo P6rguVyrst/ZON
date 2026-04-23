@@ -173,13 +173,17 @@ class ZonEncoder:
         if len(values) < 5:
             return SparseMode.NONE
 
-        is_numeric = True
+        # Only int columns are eligible for delta encoding. Float delta
+        # encoding cannot satisfy the spec §2.3 MUST round-trip requirement:
+        # prev + (cur - prev) in IEEE-754 does not preserve the original
+        # double's bit pattern for arbitrary floats.
+        is_int_only = True
         for val in values:
-            if not isinstance(val, (int, float)) or isinstance(val, bool):
-                is_numeric = False
+            if not isinstance(val, int) or isinstance(val, bool):
+                is_int_only = False
                 break
-        
-        if is_numeric:
+
+        if is_int_only:
             return SparseMode.DELTA
 
         return SparseMode.NONE
@@ -534,7 +538,9 @@ class ZonEncoder:
         lines: List[str] = []
 
         for col, values in dictionaries.items():
-            lines.append(f"{col}[{len(values)}]:{','.join(values)}")
+            # Quote dictionary values that contain special characters
+            formatted_values = [self._format_value(v) for v in values]
+            lines.append(f"{col}[{len(values)}]:{','.join(formatted_values)}")
 
         dict_cols = list(dictionaries.keys())
         regular_cols = [c for c in cols if c not in dictionaries]
@@ -650,7 +656,8 @@ class ZonEncoder:
             for k in keys:
                 v = val[k]
                 k_str = str(k)
-                if re.search(r'[,:\{\}\[\]"]', k_str):
+                # Quote keys with special chars OR boolean/null keywords
+                if re.search(r'[,:\{\}\[\]"]', k_str) or re.match(r'^(true|false|t|f|null|none|nil)$', k_str, re.IGNORECASE):
                     k_str = json.dumps(k_str)
 
                 v_str = self._format_zon_node(v, visited.copy())
