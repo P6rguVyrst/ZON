@@ -150,6 +150,17 @@ class TestCanonicalNumbers(unittest.TestCase):
         self.assertIn('42', encoded)
         self.assertIn('3.14', encoded)
 
+    def test_extreme_positive_float_stays_compact(self):
+        """Should not expand extreme floats to hundreds of digits."""
+        data = {'value': 2.5e159}
+        encoded = zon.encode(data)
+
+        self.assertLess(
+            len(encoded),
+            40,
+            f"Extreme float expanded to {len(encoded)} characters: {encoded}",
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
